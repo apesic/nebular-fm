@@ -1,23 +1,20 @@
 <div class="container">
-  <h1>Welcome to Sinatra!</h1>
-  <p>Hello, world. Whoops!</p>
+  <% if current_user %>
+    <a href="/logout">Logout</a><br>
 
-  <table>
-    <tr>
-      <th>File Description</th>
-      <th>File Location</th>
-    </tr>
-    <tr>
-      <td>This view file</td>
-      <td><code><%= __FILE__.gsub(Sinatra::Application.root, '') %></code></td>
-    </tr>
-    <tr>
-      <td>The layout file</td>
-      <td><code><%= File.expand_path('../layout.erb', __FILE__).gsub(Sinatra::Application.root, '') %></code></td>
-    </tr>
-    <tr>
-      <td>The current controller</td>
-      <td><code><%= File.expand_path('../../controllers/index.rb', __FILE__).gsub(Sinatra::Application.root, '') %></code></td>
-    </tr>
-  </table>
+    <% if current_user.lastfm_key.nil? %>
+      <a href="/login/lastfm">Connect to Last.fm</a>
+    <% else %>
+      <p>Logged in to Last.fm</p>
+    <% end %>
+
+    <% if current_user.soundcloud_key.nil? %>
+      <a href="/login/soundcloud">Connect to Soundcloud</a>
+    <% else %>
+      <p>Logged in to Soundcloud</p>
+    <% end %>
+
+  <% else %>
+    <a href="/login">Login</a><a href="/signup">Sign Up</a>
+  <% end %>
 </div>

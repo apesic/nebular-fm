@@ -20,6 +20,7 @@ GEM
     bcrypt-ruby (3.1.5)
       bcrypt (>= 3.1.3)
     builder (3.2.2)
+    coderay (1.1.0)
     daemons (1.1.9)
     diff-lcs (1.2.5)
     eventmachine (1.0.3)
@@ -27,11 +28,31 @@ GEM
       activesupport (>= 3.0.0)
     faker (1.3.0)
       i18n (~> 0.5)
+    hashie (2.1.2)
+    httmultiparty (0.3.15)
+      httparty (>= 0.7.3)
+      mimemagic
+      multipart-post
+    httparty (0.13.1)
+      json (~> 1.8)
+      multi_xml (>= 0.5.2)
     i18n (0.6.9)
     json (1.8.1)
+    lastfm (1.25.0)
+      activesupport (>= 3.2.0)
+      httparty
+      xml-simple
+    method_source (0.8.2)
+    mimemagic (0.2.1)
     minitest (5.3.4)
     multi_json (1.10.1)
+    multi_xml (0.5.5)
+    multipart-post (2.0.0)
     pg (0.17.1)
+    pry (0.10.0)
+      coderay (~> 1.1.0)
+      method_source (~> 0.8.1)
+      slop (~> 3.4)
     rack (1.5.2)
     rack-protection (1.5.3)
       rack
@@ -61,6 +82,10 @@ GEM
       rack-test
       sinatra (~> 1.4.0)
       tilt (~> 1.3)
+    slop (3.6.0)
+    soundcloud (0.3.2)
+      hashie (~> 2.0)
+      httmultiparty (~> 0.3.0)
     thin (1.6.2)
       daemons (>= 1.0.9)
       eventmachine (>= 1.0.0)
@@ -69,6 +94,7 @@ GEM
     tilt (1.4.1)
     tzinfo (1.1.0)
       thread_safe (~> 0.1)
+    xml-simple (1.1.4)
 
 PLATFORMS
   ruby
@@ -76,11 +102,13 @@ PLATFORMS
 DEPENDENCIES
   activerecord (~> 4.1)
   activesupport (~> 4.1)
-  bcrypt
+  bcrypt (~> 3.1.7)
   bcrypt-ruby
   factory_girl
   faker
+  lastfm
   pg
+  pry
   rack-test
   rake
   rspec
@@ -88,4 +116,5 @@ DEPENDENCIES
   shoulda-matchers
   sinatra
   sinatra-contrib
+  soundcloud
   thin
