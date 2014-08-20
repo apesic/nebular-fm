@@ -3,12 +3,6 @@ helpers do
     @current_user = User.find(session[:user_id]) if session[:user_id]
   end
 
-  def lastfm_session(session_key)
-    lastfm = Lastfm.new(LASTFM['api_key'], LASTFM['api_secret'])
-    lastfm.session = session_key
-    return lastfm
-  end
-
   def callback_root
     host_and_port = request.host
     host_and_port << ":9393" if request.host == "localhost"
@@ -19,11 +13,6 @@ helpers do
     host_and_port = request.host
     host_and_port << ":9393" if request.host == "localhost"
     "http://www.last.fm/api/auth/?api_key=#{LASTFM['api_key']}&cb=#{callback_root}/auth/lastfm"
-  end
-
-  def lastfm_rec_artists
-    user = User.find(session[:user_id])
-    lastfm_session(user.lastfm_key).user.get_recommended_artists
   end
 
   def soundcloud_client
@@ -38,6 +27,7 @@ helpers do
     client = soundcloud_client
     client.authorize_url(:scope => "non-expiring")
   end
+
 end
 
 get '/' do
@@ -59,15 +49,16 @@ post '/signup' do
   end
 end
 
-get '/lastfm/recommendations' do
-  @artists = lastfm_rec_artists
-  erb :artists
+# Get playlist
+post '/playlist/generate' do
+  @playlist = Playlist.create(user_id: current_user.id)
+  @playlist.generate
+  erb :playlist
 end
 
-get '/soundcloud/tracks' do
-  client = soundcloud_client
-  @tracks = client.get('/tracks', :limit => 10, :order => 'hotness')
-  @tracks
+get '/playlist/:playlist_id' do
+  @playlist = Playlist.find(params[:playlist_id])
+  @playlist.to_json
 end
 
 # Go to Last.fm Auth page
@@ -79,7 +70,7 @@ end
 get '/auth/lastfm' do
   token = params[:token]
   user = User.find(session[:user_id])
-  user.update(:lastfm_key => lastfm.auth.get_session(token: token)['key'])
+  user.update(:lastfm_key => user.lastfm.auth.get_session(token: token)['key'])
   redirect '/'
 end
 

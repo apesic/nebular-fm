@@ -14,6 +14,10 @@
       <p>Logged in to Soundcloud</p>
     <% end %>
 
+  <form action="/playlist/generate" method='post'>
+    <input type="submit" value="New Playlist">
+  </form>
+
   <% else %>
     <a href="/login">Login</a><a href="/signup">Sign Up</a>
   <% end %>
