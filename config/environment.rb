@@ -20,11 +20,17 @@ require "sinatra/reloader" if development?
 
 require 'erb'
 require 'bcrypt'
+require 'yaml'
+require 'lastfm'
+require 'soundcloud'
 
 # Some helper constants for path-centric logic
 APP_ROOT = Pathname.new(File.expand_path('../../', __FILE__))
 
 APP_NAME = APP_ROOT.basename.to_s
+
+LASTFM = YAML.load_file('doc/api/lastfm.yaml')
+SOUNDCLOUD = YAML.load_file('doc/api/soundcloud.yaml')
 
 configure do
   # By default, Sinatra assumes that the root is the file that calls the configure block.

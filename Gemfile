@@ -19,8 +19,11 @@ gem 'rake'
 gem 'shotgun'
 gem 'faker'
 
-gem 'bcrypt'
+gem 'bcrypt', '~> 3.1.7'
 gem 'bcrypt-ruby'
+
+gem 'lastfm'
+gem 'soundcloud'
 
 group :test do
   gem 'shoulda-matchers'
