@@ -50,15 +50,15 @@ post '/signup' do
 end
 
 # Get playlist
-post '/playlist/generate' do
+post '/playlists/generate' do
   @playlist = Playlist.create(user_id: current_user.id)
   @playlist.generate
   erb :playlist
 end
 
-get '/playlist/:playlist_id' do
+get '/playlists/:playlist_id' do
   @playlist = Playlist.find(params[:playlist_id])
-  @playlist.to_json
+  @playlist.to_json :include => :tracks
 end
 
 # Go to Last.fm Auth page
