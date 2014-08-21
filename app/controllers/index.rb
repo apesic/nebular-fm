@@ -34,10 +34,12 @@ get '/' do
   erb :index
 end
 
+# Get signup page
 get '/signup' do
   erb :signup
 end
 
+# Create new user
 post '/signup' do
   user = User.create(params[:signup])
   if user.valid?
@@ -56,6 +58,7 @@ post '/playlists/generate' do
   erb :playlist
 end
 
+# Go to playlist page
 get '/playlists/:playlist_id' do
   @playlist = Playlist.find(params[:playlist_id])
   @playlist.to_json :include => :tracks
@@ -90,10 +93,12 @@ get '/auth/soundcloud' do
   redirect '/'
 end
 
+# Get Login Page
 get '/login' do
   erb :login
 end
 
+# Create new session
 post '/login' do
   user = User.find_by(email: params[:email])
   if user && user.authenticate(params[:password])
@@ -106,6 +111,7 @@ post '/login' do
 end
 
 # TODO: Switch to delete method via ajax
+# Delete current session
 get '/logout' do
   session.clear
   redirect '/'

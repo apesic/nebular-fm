@@ -33,7 +33,7 @@ View.prototype = {
   },
   loadTrack: function(track) {
     this.scWidget.load(track.sc_uri, this.options);
-    // this.updateNowPlaying(track);
+    this.updateNowPlaying(track);
   },
   renderTrackLink: function(element, index) {
     var li = $('<li/>');
@@ -44,16 +44,16 @@ View.prototype = {
     });
     li.append(trackLink);
     $('.tracklist').append(li);
-  }//,
-  // updateNowPlaying: function(track) {
-  //   $('.tracklist li #' + tr)
-  // }
+  },
+  updateNowPlaying: function(track) {
+    $('.tracklist li #' + track.id)
+  }
 };
 
 // ------------ CONTROLLER ------------
 function Controller(view, playlist) {
   this.view = view;
-  this.playlist = playlist;
+  this.playlist = new Playlist(playlist.tracks);
   this.tracks = playlist.tracks;
   this.currentTrackNum = 0;
 }
@@ -79,6 +79,9 @@ Controller.prototype = {
       e.preventDefault();
       ctrlr.playTrack(parseInt($(this).attr('id'), 10));
     });
+    this.view.scWidget.bind(SC.Widget.Events.FINISH, function(){
+      ctrlr.next();
+    });
   },
   createTrackLinks: function() {
     this.tracks.forEach(this.view.renderTrackLink);
@@ -88,12 +91,40 @@ Controller.prototype = {
     this.view.loadTrack(this.tracks[this.currentTrackNum]);
   },
   next: function() {
-    this.playTrack(this.currentTrackNum + 1);
+    var nextTrackNum = this.currentTrackNum + 1;
+    if (nextTrackNum <= this.tracks.length){
+      this.playTrack(nextTrackNum);
+    }
   },
   prev: function() {
-    this.playTrack(this.currentTrackNum - 1);
+    var nextTrackNum = this.currentTrackNum - 1;
+    if (nextTrackNum >= 0) {
+      this.playTrack(nextTrackNum);
+    }
   }
 };
+
+function Playlist(tracks) {
+  // $.extend(this, obj);
+  this.tracks = this.addTracks(tracks);
+}
+
+Playlist.prototype = {
+  addTracks: function(tracks) {
+    var trackArr = [];
+    tracks.forEach(function(track, index) {
+      var newTrack = new Track(track, index);
+      trackArr.push(newTrack);
+    });
+    return trackArr;
+  },
+};
+
+function Track(obj, index) {
+  $.extend(this, obj);
+  this.index = index;
+}
+
 
 // TODO: Remove global test vars
 var controller;
@@ -111,20 +142,3 @@ function getPlaylist(id) {
   });
 }
 
-// function Track(obj) {
-//   $.extend(this, obj);
-// }
-
-// Track.prototype = {
-//   constructor: Track,
-
-// };
-
-// function Playlist(name) {
-//   this.name = name;
-// }
-
-// Playlist.prototype = {
-//   constructor: Playlist,
-
-// };
