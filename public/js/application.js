@@ -46,8 +46,8 @@ View.prototype = {
     var srcRoot = "https://w.soundcloud.com/player/?url=";
     $('<iframe/>', {
       id: 'scWidget',
-      width: '500',
-      height: '465',
+      width: '600',
+      height: '558',
       scrolling: 'no',
       frameborder: 'no',
       src: srcRoot + track.sc_uri
@@ -273,6 +273,3 @@ $(document).ready(function() {
 
   $('a.signout').click(logoutUser);
 });
-
-
-

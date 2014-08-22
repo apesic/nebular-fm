@@ -29,8 +29,18 @@ APP_ROOT = Pathname.new(File.expand_path('../../', __FILE__))
 
 APP_NAME = APP_ROOT.basename.to_s
 
-LASTFM = YAML.load_file('doc/api/lastfm.yaml')
-SOUNDCLOUD = YAML.load_file('doc/api/soundcloud.yaml')
+LASTFM = {
+  'api_key' => ENV['LFM_API_KEY'],
+  'api_secret' => ENV['LFM_API_SECRET'],
+}
+
+SOUNDCLOUD = {
+  'client_id' => ENV['SC_CLIENT_ID'],
+  'client_secret' => ENV['SC_CLIENT_SECRET'],
+}
+
+# LASTFM = YAML.load_file('doc/api/lastfm.yaml')
+# SOUNDCLOUD = YAML.load_file('doc/api/soundcloud.yaml')
 
 configure do
   # By default, Sinatra assumes that the root is the file that calls the configure block.

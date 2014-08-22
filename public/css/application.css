@@ -63,6 +63,7 @@ nav a.signout {
 
 .session p {
   margin-top: 120px;
+  line-height: 30px;
 }
 
 .session span {
@@ -111,7 +112,7 @@ nav a.signout {
 
 .player {
   margin: 50px auto 25px auto;
-  width: 500px;
+  width: 600px;
 }
 
 .player-info {
