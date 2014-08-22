@@ -126,3 +126,4 @@ post '/lastfm/scrobble/:track_id' do
   track = Track.find(params[:track_id])
   current_user.scrobble(track)
 end
+

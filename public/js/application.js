@@ -24,7 +24,7 @@ Playlist.prototype = {
 // --------------- VIEW ---------------
 function View() {
   this.options = {
-    auto_play: true, // TODO: SWITCH ME
+    auto_play: true,
     buying: false,
     liking: true,
     download: false,
@@ -55,26 +55,31 @@ View.prototype = {
     this.scWidget = SC.Widget($('#scWidget').get(0));
     this.scWidget.load(track.sc_uri, this.options);
   },
+
   loadTrack: function(track) {
     this.scWidget.load(track.sc_uri, this.options);
     console.log(track);
     this.updateNowPlaying(track);
   },
+
   renderTrackLink: function(element, index) {
     var li = $('<li/>', {id: index});
     if (index === 0) li.addClass('active');
     var artist = $('<span/>', {class: 'artist', text: element.artist});
     var track = $('<span/>', {class: 'title', text: element.title});
-    var trackLink = $('<a/>', {
-      href: element.sc_uri
-    });
+    var trackLink = $('<a/>', { href: element.sc_uri });
     trackLink.append(artist).append($('<br>')).append(track);
     li.append(trackLink);
     $('.tracklist').append(li);
   },
+
   updateNowPlaying: function(track) {
     console.log(track);
     $('.tracklist li#' + track.index).addClass('active').siblings().removeClass('active');
+  },
+
+  togglePlayIcon: function() {
+    $('#playPause i').toggleClass('hidden');
   }
 };
 
@@ -93,20 +98,24 @@ Controller.prototype = {
     this.createTrackLinks();
     this.addEventHandlers();
   },
+
   addEventHandlers: function() {
     var ctrlr = this;
     $('.controls #prev').click(function(e){
       e.preventDefault();
       ctrlr.prev();
     });
+
     $('.controls #next').click(function(e){
       e.preventDefault();
       ctrlr.next();
     });
+
     $('.controls #playPause').click(function(e){
       e.preventDefault();
-      ctrlr.playPause();
+      ctrlr.togglePlay();
     });
+
     $('.tracklist li').click(function(e){
       e.preventDefault();
       console.log(this);
@@ -119,6 +128,7 @@ Controller.prototype = {
       ctrlr.next();
     });
   },
+
   scrobble: function(track) {
     console.log('scrobbled');
     $.ajax({
@@ -126,6 +136,7 @@ Controller.prototype = {
       method: 'post'
     }).done(function(msg){console.log(msg);});
   },
+
   nowPlaying: function(track) {
     console.log('now playing');
     $.ajax({
@@ -133,13 +144,16 @@ Controller.prototype = {
       method: 'post'
     }).done(function(msg){console.log(msg);});
   },
+
   createTrackLinks: function() {
     this.tracks.forEach(this.view.renderTrackLink);
   },
-  playPause: function() {
+
+  togglePlay: function() {
     this.view.scWidget.toggle();
-    // this.view.togglePlayView(); TODO
+    this.view.togglePlayIcon();
   },
+
   playTrack: function (trackNum) {
     this.currentTrackNum = trackNum;
     console.log(this);
@@ -149,12 +163,14 @@ Controller.prototype = {
     this.nowPlaying(track);
     this.view.updateNowPlaying(track);
   },
+
   next: function() {
     var nextTrackNum = this.currentTrackNum + 1;
     if (nextTrackNum <= this.tracks.length){
       this.playTrack(nextTrackNum);
     }
   },
+
   prev: function() {
     var nextTrackNum = this.currentTrackNum - 1;
     if (nextTrackNum >= 0) {
@@ -183,7 +199,8 @@ function generatePlaylist(e) {
     url: '/playlists/generate',
     method: 'post',
     dataType: 'json'
-  }).done(function(response){
+  })
+  .done(function(response){
     $('.session').hide();
     var playlist = new Playlist(response.tracks);
     var controller = new Controller(new View(), playlist);
@@ -203,7 +220,8 @@ function loginUser(e) {
     url: '/login',
     method: 'post',
     data: form.serialize()
-  }).done(function(msg){
+  })
+  .done(function(msg){
     $('.session').html(msg);
     $('.signout').show();
   });
@@ -211,9 +229,7 @@ function loginUser(e) {
 
 function signupUser(e) {
   e.preventDefault();
-  form = $(this);
-  console.log(this);
-  console.log(form.serialize());
+  var form = $(this);
   $.ajax({
     url: '/signup',
     method: 'post',
@@ -224,26 +240,38 @@ function signupUser(e) {
   });
 }
 
-$(document).ready(function() {
-  $('#login-button').click(function(e){
-    e.preventDefault();
-    $('.intro').hide();
-    $('.login').show();
+function logoutUser(e) {
+  e.preventDefault();
+  $.ajax({
+    url: '/signout',
+    method: 'delete'
   });
+}
 
-  $('#signup-button').click(function(e){
-    e.preventDefault();
-    $('.intro').hide();
-    $('.signup').show();
-  });
+function showLogin(e) {
+  e.preventDefault();
+  $('.intro').hide();
+  $('.login').show();
+}
+
+function showSignup(e) {
+  e.preventDefault();
+  $('.intro').hide();
+  $('.signup').show();
+}
+
+$(document).ready(function() {
+  $('#login-button').click(showLogin);
+
+  $('#signup-button').click(showSignup);
 
   $('#signup-form').on('submit', signupUser);
-
 
   $('#login-form').on('submit', loginUser);
 
   $('#getPlaylist').click(generatePlaylist);
-  //getPlaylist(14);
+
+  $('a.signout').click(logoutUser);
 });
 
 
