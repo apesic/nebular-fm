@@ -111,7 +111,7 @@ end
 
 # TODO: Switch to delete method via ajax
 # Delete current session
-get '/signout' do
+delete '/signout' do
   session.clear
   redirect '/'
 end
