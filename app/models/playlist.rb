@@ -6,12 +6,12 @@ class Playlist < ActiveRecord::Base
   validates :user_id, :presence => true
 
   def generate
-    artists = self.user.lastfm_rec_artists.sample(15)
+    artists = self.user.lastfm_rec_artists#.sample(35)
     artists.each do |artist|
       top_track = self.user.top_tracks(artist).sample
       track = Track.find_or_initialize_by(title: top_track['name'], artist: artist['name'])
 
-      if track.new_record? && track.get_soundcloud_uri
+      if track && track.get_soundcloud_uri
         track.save!
         playlist_track = PlaylistTrack.new(
           track_id: track.id,

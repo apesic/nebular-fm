@@ -1,0 +1,13 @@
+<div class="step2">
+  <% if current_user.lastfm_key.nil? %>
+  <div class='lastfm'>
+
+    <span>Connect your Last.fm account</span>
+    <a href="/login/lastfm"><img src="/images/lastfm_red.gif" alt="Connect to Last.fm"></a>
+  </div>
+  <% else %>
+  <div class="generate">
+    <a id="getPlaylist" class="pure-button button-purple" href="/playlists/generate"><i class="fa fa-lg fa-play-circle"></i>Generate Playlist</a>
+  </div>
+  <% end %>
+</div>

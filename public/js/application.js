@@ -1,7 +1,30 @@
+// --------------- MODELS ---------------
+function Track(obj, index) {
+  $.extend(this, obj);
+  this.index = index;
+}
+
+function Playlist(track_objs) {
+  this.tracks = this.addTracks(track_objs);
+}
+
+Playlist.prototype = {
+  addTracks: function(tracks) {
+    var trackArr = [];
+    tracks.forEach(function(track, index) {
+      var newTrack = new Track(track, index);
+      trackArr.push(newTrack);
+    });
+    console.log(trackArr);
+    return trackArr;
+  },
+};
+
+
 // --------------- VIEW ---------------
 function View() {
   this.options = {
-    auto_play: true,
+    auto_play: true, // TODO: SWITCH ME
     buying: false,
     liking: true,
     download: false,
@@ -18,6 +41,7 @@ function View() {
 
 View.prototype = {
   constructor: View,
+
   initializeWidget: function(track) {
     var srcRoot = "https://w.soundcloud.com/player/?url=";
     $('<iframe/>', {
@@ -33,27 +57,31 @@ View.prototype = {
   },
   loadTrack: function(track) {
     this.scWidget.load(track.sc_uri, this.options);
+    console.log(track);
     this.updateNowPlaying(track);
   },
   renderTrackLink: function(element, index) {
-    var li = $('<li/>');
+    var li = $('<li/>', {id: index});
+    if (index === 0) li.addClass('active');
+    var artist = $('<span/>', {class: 'artist', text: element.artist});
+    var track = $('<span/>', {class: 'title', text: element.title});
     var trackLink = $('<a/>', {
-      href: element.sc_uri,
-      id: index,
-      text: element.artist + ' | ' + element.title
+      href: element.sc_uri
     });
+    trackLink.append(artist).append($('<br>')).append(track);
     li.append(trackLink);
     $('.tracklist').append(li);
   },
   updateNowPlaying: function(track) {
-    $('.tracklist li #' + track.id)
+    console.log(track);
+    $('.tracklist li#' + track.index).addClass('active').siblings().removeClass('active');
   }
 };
 
 // ------------ CONTROLLER ------------
 function Controller(view, playlist) {
   this.view = view;
-  this.playlist = new Playlist(playlist.tracks);
+  this.playlist = playlist;
   this.tracks = playlist.tracks;
   this.currentTrackNum = 0;
 }
@@ -75,20 +103,51 @@ Controller.prototype = {
       e.preventDefault();
       ctrlr.next();
     });
-    $('.tracklist a').click(function(e){
+    $('.controls #playPause').click(function(e){
       e.preventDefault();
+      ctrlr.playPause();
+    });
+    $('.tracklist li').click(function(e){
+      e.preventDefault();
+      console.log(this);
       ctrlr.playTrack(parseInt($(this).attr('id'), 10));
     });
+
     this.view.scWidget.bind(SC.Widget.Events.FINISH, function(){
+      var track = ctrlr.tracks[ctrlr.currentTrackNum];
+      ctrlr.scrobble(track);
       ctrlr.next();
     });
+  },
+  scrobble: function(track) {
+    console.log('scrobbled');
+    $.ajax({
+      url: '/lastfm/scrobble/' + track.id,
+      method: 'post'
+    }).done(function(msg){console.log(msg);});
+  },
+  nowPlaying: function(track) {
+    console.log('now playing');
+    $.ajax({
+      url: '/lastfm/nowplaying/' + track.id,
+      method: 'post'
+    }).done(function(msg){console.log(msg);});
   },
   createTrackLinks: function() {
     this.tracks.forEach(this.view.renderTrackLink);
   },
+  playPause: function() {
+    this.view.scWidget.toggle();
+    // this.view.togglePlayView(); TODO
+  },
   playTrack: function (trackNum) {
     this.currentTrackNum = trackNum;
-    this.view.loadTrack(this.tracks[this.currentTrackNum]);
+    console.log(this);
+    var track = this.tracks[this.currentTrackNum];
+    console.log(track);
+    this.view.loadTrack(track);
+    this.nowPlaying(track);
+    this.view.updateNowPlaying(track);
   },
   next: function() {
     var nextTrackNum = this.currentTrackNum + 1;
@@ -104,41 +163,88 @@ Controller.prototype = {
   }
 };
 
-function Playlist(tracks) {
-  // $.extend(this, obj);
-  this.tracks = this.addTracks(tracks);
-}
-
-Playlist.prototype = {
-  addTracks: function(tracks) {
-    var trackArr = [];
-    tracks.forEach(function(track, index) {
-      var newTrack = new Track(track, index);
-      trackArr.push(newTrack);
-    });
-    return trackArr;
-  },
-};
-
-function Track(obj, index) {
-  $.extend(this, obj);
-  this.index = index;
-}
-
-
-// TODO: Remove global test vars
-var controller;
-var playlist, tracks;
-
-$(document).ready(function() {
-  getPlaylist(14);
-});
-
+// --------------- DRIVER ---------------
 function getPlaylist(id) {
   $.getJSON('/playlists/'+id, function(response){
-    playlist = response;
-    controller = new Controller(new View(), playlist);
+    var playlist = new Playlist(response.tracks);
+    var controller = new Controller(new View(), playlist);
+    console.log(playlist);
+    console.log(controller);
+
     controller.initialize();
   });
 }
+
+function generatePlaylist(e) {
+  e.preventDefault();
+  $('.step2').hide();
+  $('.wait').show();
+  $.ajax({
+    url: '/playlists/generate',
+    method: 'post',
+    dataType: 'json'
+  }).done(function(response){
+    $('.session').hide();
+    var playlist = new Playlist(response.tracks);
+    var controller = new Controller(new View(), playlist);
+    console.log(playlist);
+    console.log(controller);
+    controller.initialize();
+    $('.player-content').show();
+  });
+}
+
+function loginUser(e) {
+  e.preventDefault();
+  form = $(this);
+  console.log(this);
+  console.log(form.serialize());
+  $.ajax({
+    url: '/login',
+    method: 'post',
+    data: form.serialize()
+  }).done(function(msg){
+    $('.session').html(msg);
+    $('.signout').show();
+  });
+}
+
+function signupUser(e) {
+  e.preventDefault();
+  form = $(this);
+  console.log(this);
+  console.log(form.serialize());
+  $.ajax({
+    url: '/signup',
+    method: 'post',
+    data: form.serialize()
+  }).done(function(msg){
+    $('.session').html(msg);
+    $('.signout').show();
+  });
+}
+
+$(document).ready(function() {
+  $('#login-button').click(function(e){
+    e.preventDefault();
+    $('.intro').hide();
+    $('.login').show();
+  });
+
+  $('#signup-button').click(function(e){
+    e.preventDefault();
+    $('.intro').hide();
+    $('.signup').show();
+  });
+
+  $('#signup-form').on('submit', signupUser);
+
+
+  $('#login-form').on('submit', loginUser);
+
+  $('#getPlaylist').click(generatePlaylist);
+  //getPlaylist(14);
+});
+
+
 

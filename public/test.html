@@ -1,18 +1,74 @@
 <html>
-<head>
-  <script src="https://w.soundcloud.com/player/api.js" type="text/javascript"></script>
-  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-  <script src="/js/application.js"></script>
+  <head>
+    <script src="https://w.soundcloud.com/player/api.js" type="text/javascript"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script src="/js/application.js"></script>
+    <link rel="stylesheet" href="/css/application.css">
+    <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.5.0/pure-min.css">
+    <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href='http://fonts.googleapis.com/css?family=Raleway:400,500' rel='stylesheet' type='text/css'>
+  </head>
 
-  <!-- <script src="/js/underscore.js"></script> -->
+  <body>
+    <nav>
+      <h1><a href="/">nebular.fm</a></h1>
+    </nav>
+    <div class="wrapper">
+    <div class="session">
+      <div class="intro">
+        <p>Nebular.fm uses your Last.fm recommendations to generate a streaming SoundCloud playlist.</p>
+        <span><a class="pure-button" id="login-button" href="/login">Log In</a> <a class="pure-button" id='signup-button' href="/signup">Sign Up</a></span>
+      </div>
 
-</head>
-<body>
-<div class="player"></div>
-<div class="controls">
-  <a href="#" id="prev">Prev</a>
-  <a href="#" id="next">Next</a>
-</div>
-<ul class="tracklist"></ul>
-</body>
+      <div class="form signup">
+        <h2>Sign Up</h2>
+        <form action="/signup" method="post" class="pure-form pure-form-stacked">
+          <input type="text" name="signup[email]" placeholder="Email">
+          <input type="password" name="signup[password]" placeholder="Password">
+          <input type="password" name="signup[password_confirmation]" placeholder="Confirm Password">
+          <input class="pure-button button-purple" type="submit" value="Sign Up">
+        </form>
+      </div>
+      <div class="form login">
+        <form action="/login" method="post" class="pure-form pure-form-stacked">
+          <fieldset>
+          <h2>Log In</h2>
+
+          <input type="email" name="email" placeholder="Email">
+          <input type="password" name="password" placeholder="Password">
+          <input class="pure-button button-purple"type="submit" value="Login">
+          </fieldset>
+        </form>
+      </div>
+      <div class="step2">
+        <div class='lastfm'>
+          <span>Connect your Last.fm account</span>
+          <a href="/login/lastfm"><img src="/images/lastfm_red.gif" alt="Connect to Last.fm"></a>
+        </div>
+        <div class="generate">
+          <a class="pure-button button-purple" href="/playlists/generate">Generate Playlist</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="player-content">
+      <div class="tracklist-menu">
+        <ul class="tracklist"></ul>
+      </div>
+
+      <div class="container">
+        <div class="player"></div>
+
+        <div class="player-info">
+          <div class="controls">
+            <a href="#" id="prev" class="pure-button button-purple"><i class="fa fa-lgs fa-step-backward"></i></a>
+            <a href="#" id="playPause" class="pure-button button-purple"><i class="fa fa-lgs fa-play"></i></a>
+            <a href="#" id="next" class="pure-button button-purple"><i class="fa fa-lgs fa-step-forward"></i></a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    </div>
+  </body>
 </html>

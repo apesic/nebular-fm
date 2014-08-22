@@ -41,13 +41,13 @@ end
 
 # Create new user
 post '/signup' do
-  user = User.create(params[:signup])
-  if user.valid?
-    session[:user_id] = user.id
-    redirect '/'
+  @user = User.create(params[:signup])
+  if @user.valid?
+    session[:user_id] = @user.id
+    erb :'partials/_step2', :layout => false
   else
-    flash[:error] = user.errors.full_messages
-    redirect '/signup'
+    @user.errors.full_messages
+
   end
 end
 
@@ -55,7 +55,7 @@ end
 post '/playlists/generate' do
   @playlist = Playlist.create(user_id: current_user.id)
   @playlist.generate
-  erb :playlist
+  @playlist.to_json :include => :tracks
 end
 
 # Go to playlist page
@@ -100,19 +100,29 @@ end
 
 # Create new session
 post '/login' do
-  user = User.find_by(email: params[:email])
-  if user && user.authenticate(params[:password])
-    session[:user_id] = user.id
-    redirect '/'
+  @user = User.find_by(email: params[:email])
+  if @user && @user.authenticate(params[:password])
+    session[:user_id] = @user.id
+    erb :'partials/_step2', :layout => false
   else
-    flash[:error] = "Invalid email or password"
-    redirect '/login'
+    "Invalid email or password"
   end
 end
 
 # TODO: Switch to delete method via ajax
 # Delete current session
-get '/logout' do
+get '/signout' do
   session.clear
   redirect '/'
+end
+
+
+post '/lastfm/nowplaying/:track_id' do
+  track = Track.find(params[:track_id])
+  current_user.scrobble(track)
+end
+
+post '/lastfm/scrobble/:track_id' do
+  track = Track.find(params[:track_id])
+  current_user.scrobble(track)
 end

@@ -1,10 +1,183 @@
-.container {
-  margin: 20px auto;
-  width: 600px;
-  padding: 0px 20px 20px 20px;
-  border: 1px dotted black;
+.hidden {
+  display: none !important;
 }
 
-th {
-  text-align: left;
+body {
+  background-color: #333;
+  font-family: 'Raleway', sans-serif;
 }
+
+nav {
+  height: 10%;
+  width: 100%;
+  background-color: #492f83;
+}
+
+nav a {
+  color: white;
+  text-decoration: none;
+}
+nav h1 a:hover {
+  border-bottom: 2px solid white;
+}
+
+nav h1 {
+  color: white;
+  font-size: 3em;
+  font-weight: lighter;
+  margin: 0 10px;
+  padding-left: 60px;
+  line-height: 2em;
+  display: inline-block;
+}
+
+nav a.signout {
+  position: absolute;
+  right: 10px;
+  top: 20px;
+  line-height: 2em;
+}
+
+.session {
+  color: white;
+  font-size: 1.2em;
+  width: 485px;
+  height: 450px;
+  margin: 0 auto;
+  padding: 15px;
+  position: relative;
+  top: 100px;
+  background-color: #191818;
+  border-radius: 5px;
+  text-align: center;
+}
+
+.session div.form {
+  display: none;
+  margin: 40px auto;
+}
+
+.session  input{
+  margin: 10px auto !important;
+}
+
+.session p {
+  margin-top: 120px;
+}
+
+.session span {
+  display: inline-block;
+  margin: 40px auto;
+}
+.session a.pure-button {
+  padding: 15px;
+  font-weight: bold;
+}
+
+.lastfm span {
+  font-size: 1.5em;
+}
+
+.lastfm a {
+  display: block;
+  margin: 40px auto 0 auto;
+}
+
+.generate {
+  padding-top: 150px;
+}
+
+.generate a.pure-button {
+  line-height: 2em;
+}
+
+.wait {
+  display: none;
+  margin: 150px auto;
+  font-size: 2em;
+  color: white;
+}
+.player-content {
+  display: none;
+}
+
+.container {
+  width: 900px;
+  margin: 0 auto;
+  position: absolute;
+  top: 150px;
+  left: 400px;
+}
+
+.player {
+  margin: 50px auto 25px auto;
+  width: 500px;
+}
+
+.player-info {
+  text-align: center;
+}
+
+.controls {
+  display: inline-block;
+}
+
+.pure-button.button-purple {
+  background-color: #492f83;
+  color: white;
+}
+
+.pure-button i {
+  padding: 15px;
+}
+
+.tracklist-menu {
+  width: 400px;
+  left: 0;
+  bottom: 0;
+  height: 90vh;
+  overflow: scroll;
+  background-color: #191818;
+  color: #ccc;
+}
+
+ul.tracklist  {
+  padding: 0;
+}
+
+.tracklist li {
+  list-style: none;
+  cursor: pointer;
+  padding-left: 30px;
+}
+
+.tracklist li.active {
+  background-color: #492f83;
+}
+
+.tracklist li:hover {
+  background-color: #492f83;
+}
+
+.tracklist a {
+  text-decoration: none;
+  color: #ccc;
+  display: inline-block;
+  padding: 0.5em 0.1em;
+}
+
+.tracklist span {
+  line-height: 20px;
+  display: inline-block;
+  padding: 5px 0;
+}
+
+.tracklist .artist {
+  font-weight: 500;
+  color: #eee;
+}
+.tracklist .title {
+  border-top: 1px solid #ddd;
+}
+
+/* Giant Steps, Mingus Ah Uhm, The Bird (Charlie Parker) */

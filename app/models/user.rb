@@ -11,6 +11,16 @@ class User < ActiveRecord::Base
     return lastfm
   end
 
+  def now_playing(track)
+    lastfm.track.update_now_playing(artist: track.artist, track: track.title)
+
+  end
+
+  def scrobble(track)
+    lastfm.track.scrobble(artist: track.artist, track: track.title)
+
+  end
+
   def lastfm_rec_artists
     lastfm.user.get_recommended_artists(limit: 20)
   end

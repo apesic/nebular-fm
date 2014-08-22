@@ -1,0 +1,26 @@
+
+<div class="intro">
+  <p>Nebular.fm uses your Last.fm recommendations to generate a streaming SoundCloud playlist.</p>
+  <span><a class="pure-button" id="login-button" href="/login">Log In</a> <a class="pure-button" id='signup-button' href="/signup">Sign Up</a></span>
+</div>
+
+<div class="form signup">
+  <h2>Sign Up</h2>
+  <form id="signup-form" action="/signup" method="post" class="pure-form pure-form-stacked">
+    <input type="text" name="signup[email]" placeholder="Email">
+    <input type="password" name="signup[password]" placeholder="Password">
+    <input type="password" name="signup[password_confirmation]" placeholder="Confirm Password">
+    <input class="pure-button button-purple" type="submit" value="Sign Up">
+  </form>
+</div>
+<div class="form login">
+  <form id="login-form" action="/login" method="post" class="pure-form pure-form-stacked">
+    <fieldset>
+    <h2>Log In</h2>
+
+    <input type="email" name="email" placeholder="Email">
+    <input type="password" name="password" placeholder="Password">
+    <input class="pure-button button-purple"type="submit" value="Login">
+    </fieldset>
+  </form>
+</div>
