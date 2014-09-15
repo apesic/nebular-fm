@@ -1,22 +1,10 @@
 Nebular.fm
 ================
 
-Order of operations: 
-- Hook into Last.fm and Soundcloud APIs (Mixcloud too if possible)
-- Get Last.fm Recommended Artists
-- Search for those artists on Soundcloud
-- Pick top tracks
-- Store list of tracks as playlist
-- Generate view with embedded audio for playlist
-- Set up proper auth
+Use your Last.fm listening history to generate a SoundCloud playlist. Once you authorize access to your Last.fm profile via OAuth, all you have to do is click "Generate" and it will create a streaming playlist.
 
+The backend is built with Sinatra and uses ActiveRecord and a Postgres database to store user profiles and playlists.
 
-Remaining:
-- ~~Fix play button behavior~~
-- Fix scrobbling?
-- Get another playlist when done?
-- Style tweaks. Main page, about page.
-- Design logo
-- Move api keys into ENV variables
-- Change repo name
-- Deploy to Heroku
+The frontend is a one-page JavaScript app, built with a mini-MVC that I wrote.
+
+This is still a work in progress, and the playlist generation process can be slow and occasionally times out. If it's giving you trouble, try refreshing.
