@@ -34,5 +34,4 @@ group :test, :development do
   gem 'rspec'
   gem 'factory_girl'
   gem 'pry'
-  # gem 'awesome_print'
 end
