@@ -13,7 +13,7 @@ class Playlist < ActiveRecord::Base
       track = Track.find_or_initialize_by(title: top_track['name'], artist: artist['name'])
       if track && track.get_soundcloud_uri
         track.save!
-	tracks << track
+        tracks << track
       end
     end
   end

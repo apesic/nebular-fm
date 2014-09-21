@@ -6,11 +6,11 @@ class Track < ActiveRecord::Base
     client = soundcloud_client
     begin
       sc_tracks = client.get(
-	'/tracks',
-	:q => "#{artist} #{title}",
-	:limit=>20,
-	:duration => {:from => 120000, :to => 600000},
-	:streamable => true,
+        '/tracks',
+        :q => "#{artist} #{title}",
+        :limit=>20,
+        :duration => {:from => 120000, :to => 600000},
+        :streamable => true,
       )
     rescue
       binding.pry
