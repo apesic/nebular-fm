@@ -7,9 +7,12 @@
 <div class="form signup">
   <h2>Sign Up</h2>
   <form id="signup-form" action="/signup" method="post" class="pure-form pure-form-stacked">
-    <input type="text" name="signup[email]" placeholder="Email">
-    <input type="password" name="signup[password]" placeholder="Password">
-    <input type="password" name="signup[password_confirmation]" placeholder="Confirm Password">
+    <label for="signup[email]">Email</label>
+    <input type="email" name="signup[email]" placeholder="you@email.com" required>
+    <label for="signup[password]">Password</label>
+    <input type="password" name="signup[password]" placeholder="8 or more characters" required>
+    <label for="signup[password_confirmation]">Confirm password</label>
+    <input type="password" name="signup[password_confirmation]" required>
     <input class="pure-button button-purple" type="submit" value="Sign Up">
   </form>
 </div>
@@ -18,9 +21,11 @@
     <fieldset>
     <h2>Log In</h2>
 
-    <input type="email" name="email" placeholder="Email">
-    <input type="password" name="password" placeholder="Password">
-    <input class="pure-button button-purple"type="submit" value="Login">
+    <label for="email">Email</label>
+    <input type="text" name="email" placeholder="Email" required>
+    <label for="password">Password</label>
+    <input type="password" name="password" placeholder="Password" required>
+    <input class="pure-button button-purple" type="submit" value="Login">
     </fieldset>
   </form>
 </div>
