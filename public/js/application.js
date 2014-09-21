@@ -4,8 +4,8 @@ function Track(obj, index) {
   this.index = index;
 }
 
-function Playlist(track_objs) {
-  this.tracks = this.addTracks(track_objs);
+function Playlist(tracks) {
+  this.tracks = this.addTracks(tracks);
 }
 
 Playlist.prototype = {
@@ -83,16 +83,16 @@ View.prototype = {
   }
 };
 
-// ------------ CONTROLLER ------------
-function Controller(view, playlist) {
+// ------------ PLAYLIST CONTROLLER ------------
+function PlaylistController(view, playlist) {
   this.view = view;
   this.playlist = playlist;
   this.tracks = playlist.tracks;
   this.currentTrackNum = 0;
 }
 
-Controller.prototype = {
-  constructor: Controller,
+PlaylistController.prototype = {
+  constructor: PlaylistController,
   initialize: function() {
     this.view.initializeWidget(this.tracks[this.currentTrackNum]);
     this.createTrackLinks();
@@ -180,18 +180,19 @@ Controller.prototype = {
 };
 
 // --------------- DRIVER ---------------
-function getPlaylist(id) {
+var nebular = {};
+
+nebular.getPlaylist = function(id) {
   $.getJSON('/playlists/'+id, function(response){
     var playlist = new Playlist(response.tracks);
-    var controller = new Controller(new View(), playlist);
+    var controller = new PlaylistController(new View(), playlist);
     console.log(playlist);
     console.log(controller);
-
     controller.initialize();
   });
-}
+};
 
-function generatePlaylist(e) {
+nebular.generatePlaylist = function (e) {
   e.preventDefault();
   $('.step2').hide();
   $('.wait').show();
@@ -203,19 +204,20 @@ function generatePlaylist(e) {
   .done(function(response){
     $('.session').hide();
     var playlist = new Playlist(response.tracks);
-    var controller = new Controller(new View(), playlist);
+    var controller = new PlaylistController(new View(), playlist);
     console.log(playlist);
     console.log(controller);
     controller.initialize();
     $('.player-content').show();
+  })
+  .error(function(response){
+    console.log(response);
   });
-}
+};
 
-function loginUser(e) {
+nebular.loginUser = function(e) {
   e.preventDefault();
-  form = $(this);
-  console.log(this);
-  console.log(form.serialize());
+  var form = $(this);
   $.ajax({
     url: '/login',
     method: 'post',
@@ -225,51 +227,55 @@ function loginUser(e) {
     $('.session').html(msg);
     $('.signout').show();
   });
-}
+};
 
-function signupUser(e) {
+nebular.signupUser = function(e) {
   e.preventDefault();
   var form = $(this);
   $.ajax({
     url: '/signup',
     method: 'post',
     data: form.serialize()
-  }).done(function(msg){
-    $('.session').html(msg);
+  }).done(function(response){
+    $('.session').html(response);
     $('.signout').show();
   });
-}
+};
 
-function logoutUser(e) {
+nebular.logoutUser = function(e) {
   e.preventDefault();
   $.ajax({
     url: '/signout',
     method: 'delete'
+  }).done(function(response){
+    console.log(response);
+    if (response.redirect) {
+      window.location.href = response.redirect;
+    }
   });
-}
+};
 
-function showLogin(e) {
+nebular.showLogin = function(e) {
   e.preventDefault();
   $('.intro').hide();
   $('.login').show();
-}
+};
 
-function showSignup(e) {
+nebular.showSignup = function(e) {
   e.preventDefault();
   $('.intro').hide();
   $('.signup').show();
-}
+};
+
+nebular.bindEventListeners = function() {
+  $('#login-button').click(nebular.showLogin);
+  $('#signup-button').click(nebular.showSignup);
+  $('#signup-form').on('submit', nebular.signupUser);
+  $('#login-form').on('submit', nebular.loginUser);
+  $('#getPlaylist').click(nebular.generatePlaylist);
+  $('a.signout').click(nebular.logoutUser);
+};
 
 $(document).ready(function() {
-  $('#login-button').click(showLogin);
-
-  $('#signup-button').click(showSignup);
-
-  $('#signup-form').on('submit', signupUser);
-
-  $('#login-form').on('submit', loginUser);
-
-  $('#getPlaylist').click(generatePlaylist);
-
-  $('a.signout').click(logoutUser);
+  nebular.bindEventListeners();
 });
