@@ -22,7 +22,7 @@ class User < ActiveRecord::Base
   end
 
   def lastfm_rec_artists
-    lastfm.user.get_recommended_artists(limit: 20)
+    lastfm.user.get_recommended_artists(limit: 50)
   end
 
   def top_tracks(artist)
