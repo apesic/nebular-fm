@@ -9,4 +9,4 @@ The backend is built with Sinatra and uses ActiveRecord and a Postgres database 
 
 The frontend is a one-page JavaScript app, built with a mini-MVC that I wrote.
 
-This is still a work in progress, and the playlist generation process can be slow and occasionally times out. If it's giving you trouble, try refreshing.
+This is still a work in progress, and the playlist generation process can be slow. 
