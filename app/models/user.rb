@@ -13,13 +13,11 @@ class User < ActiveRecord::Base
   end
 
   def now_playing(track)
-    lastfm.track.update_now_playing(artist: track.artist, track: track.title)
-
+    lastfm.track.update_now_playing(track)
   end
 
   def scrobble(track)
-    lastfm.track.scrobble(artist: track.artist, track: track.title)
-
+    lastfm.track.scrobble(track)
   end
 
   def lastfm_rec_artists

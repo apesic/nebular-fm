@@ -127,17 +127,31 @@ PlaylistController.prototype = {
 
   scrobble: function(track) {
     console.log('scrobbled');
+    var params = {
+      artist: track.artist,
+      title: track.title
+    };
     $.ajax({
-      url: '/lastfm/scrobble/' + track.id,
-      method: 'post'
+      url: '/lastfm/scrobble',
+      method: 'post',
+      dataType: 'json',
+      contentType: 'application/json',
+      data: JSON.stringify(params)
     }).done(function(msg){console.log(msg);});
   },
 
   nowPlaying: function(track) {
     console.log('now playing');
+    var params = {
+      artist: track.artist,
+      title: track.title
+    };
     $.ajax({
-      url: '/lastfm/nowplaying/' + track.id,
-      method: 'post'
+      url: '/lastfm/nowplaying',
+      method: 'post',
+      dataType: 'json',
+      contentType: 'application/json',
+      data: JSON.stringify(params)
     }).done(function(msg){console.log(msg);});
   },
 
