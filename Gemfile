@@ -33,5 +33,8 @@ end
 group :test, :development do
   gem 'rspec'
   gem 'factory_girl'
+end
+
+group :development do
   gem 'pry'
 end
