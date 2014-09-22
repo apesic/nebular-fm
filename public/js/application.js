@@ -15,7 +15,6 @@ Playlist.prototype = {
       var newTrack = new Track(track, index);
       trackArr.push(newTrack);
     });
-    console.log(trackArr);
     return trackArr;
   },
 };
@@ -58,7 +57,6 @@ View.prototype = {
 
   loadTrack: function(track) {
     this.scWidget.load(track.sc_uri, this.options);
-    console.log(track);
     this.updateNowPlaying(track);
   },
 
@@ -74,7 +72,6 @@ View.prototype = {
   },
 
   updateNowPlaying: function(track) {
-    console.log(track);
     $('.tracklist li#' + track.index).addClass('active').siblings().removeClass('active');
   },
 
@@ -118,7 +115,6 @@ PlaylistController.prototype = {
 
     $('.tracklist li').click(function(e){
       e.preventDefault();
-      console.log(this);
       ctrlr.playTrack(parseInt($(this).attr('id'), 10));
     });
 
@@ -156,9 +152,7 @@ PlaylistController.prototype = {
 
   playTrack: function (trackNum) {
     this.currentTrackNum = trackNum;
-    console.log(this);
     var track = this.tracks[this.currentTrackNum];
-    console.log(track);
     this.view.loadTrack(track);
     this.nowPlaying(track);
     this.view.updateNowPlaying(track);
@@ -186,8 +180,6 @@ nebular.getPlaylist = function(id) {
   $.getJSON('/playlists/'+id, function(response){
     var playlist = new Playlist(response.tracks);
     var controller = new PlaylistController(new View(), playlist);
-    console.log(playlist);
-    console.log(controller);
     controller.initialize();
   });
 };
@@ -205,8 +197,6 @@ nebular.generatePlaylist = function (e) {
     $('.session').hide();
     var playlist = new Playlist(response.tracks);
     var controller = new PlaylistController(new View(), playlist);
-    console.log(playlist);
-    console.log(controller);
     controller.initialize();
     $('.player-content').show();
   })
@@ -248,7 +238,6 @@ nebular.logoutUser = function(e) {
     url: '/signout',
     method: 'delete'
   }).done(function(response){
-    console.log(response);
     if (response.redirect) {
       window.location.href = response.redirect;
     }
