@@ -30,14 +30,16 @@ get '/playlists/:playlist_id' do
   @playlist.to_json :include => :tracks
 end
 
-# Scrobble current track
-post '/lastfm/nowplaying/:track_id' do
-  track = Track.find(params[:track_id])
-  current_user.scrobble(track)
+# Update Last.fm Now Playing
+post '/lastfm/nowplaying' do
+  params = JSON.parse(request.env["rack.input"].read)
+  response = current_user.now_playing(artist: params['artist'], track: params['title'])
+  response.to_json
 end
 
 # Scrobble finished track
-post '/lastfm/scrobble/:track_id' do
-  track = Track.find(params[:track_id])
-  current_user.scrobble(track)
+post '/lastfm/scrobble' do
+  params = JSON.parse(request.env["rack.input"].read)
+  response = current_user.scrobble(artist: params['artist'], track: params['title'])
+  response.to_json
 end
