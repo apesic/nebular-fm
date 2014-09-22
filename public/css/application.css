@@ -31,7 +31,7 @@ nav h1 {
   display: inline-block;
 }
 
-nav a.signout {
+nav .signout {
   position: absolute;
   right: 10px;
   top: 20px;
@@ -52,12 +52,12 @@ nav a.signout {
   text-align: center;
 }
 
-.session div.form {
+.session .form {
   display: none;
   margin: 40px auto;
 }
 
-.session  input{
+.session input{
   margin: 10px auto !important;
 }
 
@@ -85,7 +85,6 @@ nav a.signout {
 }
 
 .generate {
-  padding-top: 150px;
 }
 
 .generate a.pure-button {
@@ -152,7 +151,7 @@ ul.tracklist  {
   padding-left: 30px;
 }
 
-.tracklist li.active {
+.tracklist .active {
   background-color: #492f83;
 }
 
@@ -180,5 +179,3 @@ ul.tracklist  {
 .tracklist .title {
   border-top: 1px solid #ddd;
 }
-
-/* Giant Steps, Mingus Ah Uhm, The Bird (Charlie Parker) */
